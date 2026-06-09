@@ -1,0 +1,26 @@
+{
+  "data": [
+    {
+      "id": 16504923529,
+      "nome": "Camiseta Básica",
+      "codigo": "CAM-001",
+      "preco": 59.9,
+      "descricaoCurta": "Camiseta 100% algodão",
+      "categoria": {
+        "id": 123456,
+        "descricao": "Eletrônicos"
+      }
+    },
+    {
+      "id": 16504923530,
+      "nome": "Garrafa Térmica",
+      "codigo": "GAR-002",
+      "preco": 89.9,
+      "descricaoCurta": "Garrafa inox 500ml",
+      "categoria": {
+        "id": 123457,
+        "descricao": "Casa"
+      }
+    }
+  ]
+}
