@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 import { AUTH_COOKIE_NAME } from "@/lib/constants/auth";
 
 const PUBLIC_ROUTES = ["/login"];
-const PROTECTED_ROUTES = ["/settings"];
+const PROTECTED_ROUTES = ["/settings", "/mappings"];
 
 function isPublicRoute(pathname: string): boolean {
   return PUBLIC_ROUTES.some((route) => pathname.startsWith(route));
@@ -35,5 +35,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/", "/login", "/settings/:path*"],
+  matcher: ["/", "/login", "/settings/:path*", "/mappings/:path*"],
 };
