@@ -7,7 +7,10 @@ import { Button } from "@/components/ui/Button";
 import { useCurrentUser, useLogout } from "@/lib/queries/use-auth";
 import { cn } from "@/lib/utils/cn";
 
-const navItems = [{ href: "/settings", label: "Settings" }];
+const navItems = [
+  { href: "/settings", label: "Settings" },
+  { href: "/mappings", label: "Mappings" },
+];
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
