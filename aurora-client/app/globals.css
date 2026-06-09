@@ -29,6 +29,7 @@
   --warning-surface: #fffbeb;
 
   --radius: 0.625rem;
+  --shadow-card: 0 1px 2px rgb(10 10 10 / 0.06);
 
   --spacing-page: 2rem;
   --container-max: 64rem;
@@ -92,6 +93,7 @@
   --color-warning-surface: var(--warning-surface);
 
   --radius-app: var(--radius);
+  --shadow-card: var(--shadow-card);
 
   --spacing-page: var(--spacing-page);
   --container-max: var(--container-max);

@@ -8,7 +8,6 @@ import { FadeIn } from "@/components/motion/FadeIn";
 import { ScaleIn } from "@/components/motion/ScaleIn";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
-import { ErrorShow } from "@/components/ui/ErrorShow";
 import { FormField } from "@/components/ui/FormField";
 import { useLogin, useRegister } from "@/lib/queries/use-auth";
 import {
@@ -40,9 +39,6 @@ export default function LoginPage() {
       password_confirmation: "",
     },
   });
-
-  const activeMutation = mode === "login" ? login : register;
-  const activeError = activeMutation.error;
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
@@ -100,7 +96,6 @@ export default function LoginPage() {
                   error={loginForm.formState.errors.password}
                   registration={loginForm.register("password")}
                 />
-                <ErrorShow error={activeError} />
                 <Button type="submit" fullWidth disabled={login.isPending}>
                   {login.isPending ? "Please wait..." : "Sign In"}
                 </Button>
@@ -137,7 +132,6 @@ export default function LoginPage() {
                   error={registerForm.formState.errors.password_confirmation}
                   registration={registerForm.register("password_confirmation")}
                 />
-                <ErrorShow error={activeError} />
                 <Button type="submit" fullWidth disabled={register.isPending}>
                   {register.isPending ? "Please wait..." : "Create Account"}
                 </Button>

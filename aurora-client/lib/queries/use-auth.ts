@@ -10,6 +10,7 @@ import {
   userSchema,
 } from "@/lib/schemas/auth";
 import { useAuthStore } from "@/lib/stores/auth-store";
+import { toast } from "@/lib/toast";
 
 export const authKeys = {
   user: ["auth", "user"] as const,
@@ -25,6 +26,9 @@ export function useCurrentUser() {
     queryFn: async () => {
       const response = await api.get("/user");
       return userSchema.parse(response.data.data);
+    },
+    meta: {
+      errorMessage: "Unable to load your profile.",
     },
   });
 }
@@ -42,7 +46,11 @@ export function useLogin() {
     onSuccess: (data) => {
       setSession(data.user, data.token);
       queryClient.setQueryData(authKeys.user, data.user);
+      toast.success(`Welcome back, ${data.user.name}.`);
       router.replace("/settings");
+    },
+    onError: (error) => {
+      toast.error(error, "Unable to sign in. Check your credentials.");
     },
   });
 }
@@ -60,7 +68,11 @@ export function useRegister() {
     onSuccess: (data) => {
       setSession(data.user, data.token);
       queryClient.setQueryData(authKeys.user, data.user);
+      toast.success("Account created successfully.");
       router.replace("/settings");
+    },
+    onError: (error) => {
+      toast.error(error, "Unable to create your account.");
     },
   });
 }
@@ -73,6 +85,12 @@ export function useLogout() {
   return useMutation({
     mutationFn: async () => {
       await api.post("/logout");
+    },
+    onSuccess: () => {
+      toast.info("You have been signed out.");
+    },
+    onError: () => {
+      toast.info("Session ended locally.");
     },
     onSettled: () => {
       clearSession();

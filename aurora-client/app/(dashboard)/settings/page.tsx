@@ -1,17 +1,15 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { PageEnter } from "@/components/motion/PageEnter";
 import { StaggerItem, StaggerList } from "@/components/motion/StaggerList";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
-import { ErrorShow } from "@/components/ui/ErrorShow";
 import { FormField } from "@/components/ui/FormField";
 import { Loading } from "@/components/ui/Loading";
-import { SuccessShow } from "@/components/ui/SuccessShow";
 import {
   useCreateStoreCredentials,
   useStoreCredentials,
@@ -27,7 +25,6 @@ import {
 
 export default function SettingsPage() {
   const credentialsQuery = useStoreCredentials();
-  const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
   if (credentialsQuery.isLoading) {
     return <Loading label="Loading settings..." />;
@@ -44,10 +41,6 @@ export default function SettingsPage() {
           <CredentialsForm
             key={credentialsQuery.data ? "update" : "create"}
             credential={credentialsQuery.data ?? null}
-            queryError={credentialsQuery.error}
-            onSuccess={() => setSuccessMessage("Credentials saved successfully.")}
-            successMessage={successMessage}
-            onClearSuccess={() => setSuccessMessage(null)}
           />
         </StaggerItem>
       </StaggerList>
@@ -87,19 +80,7 @@ function CredentialsOverview({ credential }: { credential: StoreCredential | nul
   );
 }
 
-function CredentialsForm({
-  credential,
-  queryError,
-  onSuccess,
-  successMessage,
-  onClearSuccess,
-}: {
-  credential: StoreCredential | null;
-  queryError: Error | null;
-  onSuccess: () => void;
-  successMessage: string | null;
-  onClearSuccess: () => void;
-}) {
+function CredentialsForm({ credential }: { credential: StoreCredential | null }) {
   const isConfigured = Boolean(credential);
   const createCredentials = useCreateStoreCredentials();
   const updateCredentials = useUpdateStoreCredentials();
@@ -129,8 +110,6 @@ function CredentialsForm({
       <form
         className="grid gap-5"
         onSubmit={form.handleSubmit(async (values) => {
-          onClearSuccess();
-
           if (isConfigured) {
             await updateCredentials.mutateAsync(values);
           } else {
@@ -143,7 +122,6 @@ function CredentialsForm({
             shopify_access_token: "",
             shopify_api_secret: "",
           });
-          onSuccess();
         })}
       >
         <FormField
@@ -192,9 +170,6 @@ function CredentialsForm({
           error={form.formState.errors.shopify_api_secret}
           registration={form.register("shopify_api_secret")}
         />
-
-        <ErrorShow error={queryError ?? saveMutation.error} />
-        <SuccessShow message={successMessage} />
 
         <Button type="submit" disabled={saveMutation.isPending}>
           {saveMutation.isPending

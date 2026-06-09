@@ -1,22 +1,11 @@
 import { AnimatedFeedback } from "@/components/motion/AnimatedFeedback";
-import { ApiError } from "@/lib/api";
+import { getToastErrorMessage } from "@/lib/toast";
 import { cn } from "@/lib/utils/cn";
 
 type ErrorShowProps = {
   error?: Error | null;
   className?: string;
 };
-
-function getErrorMessage(error: Error): string {
-  if (error instanceof ApiError && error.errors) {
-    const firstFieldError = Object.values(error.errors).flat()[0];
-    if (firstFieldError) {
-      return firstFieldError;
-    }
-  }
-
-  return error.message;
-}
 
 export function ErrorShow({ error, className }: ErrorShowProps) {
   return (
@@ -29,7 +18,7 @@ export function ErrorShow({ error, className }: ErrorShowProps) {
           )}
           role="alert"
         >
-          {getErrorMessage(error)}
+          {getToastErrorMessage(error)}
         </div>
       )}
     </AnimatedFeedback>

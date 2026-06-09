@@ -1,6 +1,7 @@
 "use client";
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useEffect, useRef } from "react";
 import { api } from "@/lib/api";
 import {
   storeCredentialSchema,
@@ -9,6 +10,7 @@ import {
   type UpdateStoreCredentialInput,
 } from "@/lib/schemas/store-credential";
 import { useAuthStore } from "@/lib/stores/auth-store";
+import { toast } from "@/lib/toast";
 
 export const storeCredentialKeys = {
   all: ["store-credentials"] as const,
@@ -28,8 +30,9 @@ function stripEmptySecrets<T extends Record<string, unknown>>(payload: T): Parti
 export function useStoreCredentials() {
   const token = useAuthStore((state) => state.token);
   const isHydrated = useAuthStore((state) => state.isHydrated);
+  const hasShownError = useRef(false);
 
-  return useQuery({
+  const query = useQuery({
     queryKey: storeCredentialKeys.all,
     enabled: isHydrated && Boolean(token),
     queryFn: async () => {
@@ -37,6 +40,19 @@ export function useStoreCredentials() {
       return parseCredentialResponse(response.data);
     },
   });
+
+  useEffect(() => {
+    if (query.error && !hasShownError.current) {
+      hasShownError.current = true;
+      toast.error(query.error, "Unable to load store credentials.");
+    }
+
+    if (!query.error) {
+      hasShownError.current = false;
+    }
+  }, [query.error]);
+
+  return query;
 }
 
 export function useCreateStoreCredentials() {
@@ -50,6 +66,10 @@ export function useCreateStoreCredentials() {
     },
     onSuccess: (data) => {
       queryClient.setQueryData(storeCredentialKeys.all, data);
+      toast.success("Store credentials saved successfully.");
+    },
+    onError: (error) => {
+      toast.error(error, "Unable to save store credentials.");
     },
   });
 }
@@ -65,6 +85,10 @@ export function useUpdateStoreCredentials() {
     },
     onSuccess: (data) => {
       queryClient.setQueryData(storeCredentialKeys.all, data);
+      toast.success("Store credentials updated successfully.");
+    },
+    onError: (error) => {
+      toast.error(error, "Unable to update store credentials.");
     },
   });
 }
