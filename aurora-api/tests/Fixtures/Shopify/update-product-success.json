@@ -1,0 +1,11 @@
+{
+  "data": {
+    "productUpdate": {
+      "product": {
+        "id": "gid://shopify/Product/999",
+        "tags": ["tech", "existing-tag"]
+      },
+      "userErrors": []
+    }
+  }
+}

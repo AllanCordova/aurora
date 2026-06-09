@@ -1,0 +1,18 @@
+{
+  "data": {
+    "productVariants": {
+      "edges": [
+        {
+          "node": {
+            "id": "gid://shopify/ProductVariant/111",
+            "sku": "CAM-001",
+            "product": {
+              "id": "gid://shopify/Product/999",
+              "tags": ["existing-tag"]
+            }
+          }
+        }
+      ]
+    }
+  }
+}

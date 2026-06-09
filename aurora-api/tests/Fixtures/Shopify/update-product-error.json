@@ -1,0 +1,13 @@
+{
+  "data": {
+    "productUpdate": {
+      "product": null,
+      "userErrors": [
+        {
+          "field": ["tags"],
+          "message": "Tag format is invalid."
+        }
+      ]
+    }
+  }
+}
